@@ -1,0 +1,4 @@
+./Test/Test1\app.db
+./Test/Test1\config.py
+./Test/Test1\manage.py
+./Test/Test1\requirements.txt
