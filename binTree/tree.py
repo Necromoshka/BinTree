@@ -8,10 +8,10 @@ class Tree(object):
     """Класс дерева"""
 
     def __init__(self, root=None):
-        if not root:
-            self.root = []  # корень дерева
-        else:
-            self.root = root
+#        if not root:
+#            self.root = []  # корень дерева
+#        else:
+        self.root = root
 
     def __str__(self):
         return r"Tree with " + str(self.sizenode(self.root)) + r" Nodes"
@@ -21,34 +21,34 @@ class Tree(object):
 
     @staticmethod
     def newnode(data, left=None, right=None):
-        if not left:
-            left = []
-        if not right:
-            right = []
+#        if not left:
+#            left = []
+#        if not right:
+#            right = []
         return Node(data, left, right)
 
-    def height(self, nodes, ind=0):
+    def height(self, nodes):
         """
         Высота дерева
         :param nodes:
         :param ind:
         :return:
         """
-        try:
-            if not nodes[ind]:
-                return 0
-        except IndexError:
-            if not nodes:
-                return 0
+#        try:
+        if not nodes:
+            return 0
+#        except IndexError:
+#            if not nodes:
+#                return 0
 
+#        else:
+        lheight = self.height(nodes.left)
+        rheight = self.height(nodes.right)
+
+        if lheight > rheight:
+            return lheight + 1
         else:
-            lheight = self.height(nodes[ind].left, ind)
-            rheight = self.height(nodes[ind].right, ind)
-
-            if lheight > rheight:
-                return lheight + 1
-            else:
-                return rheight + 1
+            return rheight + 1
 
     def mirrortree(self, nodes, ind=0):
         """
@@ -67,7 +67,7 @@ class Tree(object):
             if nodes[ind].right == [] and nodes[ind].left:
                 return self.mirrortree(nodes[ind].left)
 
-    def lookup(self, nodes, target, ind=0):
+    def lookup(self, nodes, target):
         """
         Поиск по дереву
         :param nodes:
@@ -75,24 +75,24 @@ class Tree(object):
         :param ind:
         :return:
         """
-        try:
-            if not nodes[ind]:
-                return 0
+#        try:
+        if not nodes:
+            return 0
+        else:
+            if target == nodes.data:
+                return 1
             else:
-                if target == nodes[ind].data:
-                    return 1
+                if target < nodes.data:
+                    return self.lookup(nodes.left, target)
                 else:
-                    if target < nodes[ind].data:
-                        return self.lookup(nodes[ind].left, target, ind)
-                    else:
-                        return self.lookup(nodes[ind].right, target, ind)
-        except IndexError:
-            if not nodes:
-                return 0
-            else:
-                return "Index Error(la)"
+                    return self.lookup(nodes.right, target)
+#        except IndexError:
+ #           if not nodes:
+ #               return 0
+ #           else:
+ #               return "Index Error(la)"
 
-    def getmaxwidth(self, root, ind=0):
+    def getmaxwidth(self, root):
         """
         Ширина дерева максимальная
         :param root:
@@ -102,15 +102,15 @@ class Tree(object):
         maxwdth = 0
         i = 1
 
-        h = self.height(root, ind)
+        h = self.height(root)
         while i < h:
-            width = self.getwidth(root, i, ind)
+            width = self.getwidth(root, i)
             if width > maxwdth:
                 maxwdth = width
             i += 1
         return maxwdth
 
-    def getwidth(self, root, level, ind=0):
+    def getwidth(self, root, level):
         """
         Ширина уровня дерева
         :param root:
@@ -118,18 +118,14 @@ class Tree(object):
         :param ind:
         :return:
         """
-        try:
-            if not root[ind]:
-                return 0
-        except IndexError:
-            if root:
-                return "Index Error(gw)"
-            else:
-                return 0
+
+        if not root:
+            return 0
+
         if level == 1:
             return 1
         elif level > 1:
-            return self.getwidth(root[ind].left, level - 1, ind) + self.getwidth(root[ind].right, level - 1, ind)
+            return self.getwidth(root.left, level - 1) + self.getwidth(root.right, level - 1)
 
     def printgivenlevel(self, root, level, ind=0):
         """Распечатка уровня дерева
@@ -137,69 +133,59 @@ class Tree(object):
         :param level:
         :param ind:
         """
-        try:
-            if not root[ind]:
-                return None
-        except IndexError:
-            if not root:
-                return None
-            else:
-                return "Index Error(pl)"
-        if level == 1:
-            print "%d " % root[ind].data,
-        elif level > 1:
-            self.printgivenlevel(root[ind].left, level - 1, ind)
-            self.printgivenlevel(root[ind].right, level - 1, ind)
 
-    def printlevelorder(self, ind=0):
+        if not root:
+            return None
+
+        if level == 1:
+            print "%d " % root.data,
+        elif level > 1:
+            self.printgivenlevel(root.left, level - 1)
+            self.printgivenlevel(root.right, level - 1)
+
+    def printlevelorder(self):
         """Распечатка дерева
         :param ind:
         """
-        h = self.height(self.root, ind)
+        h = self.height(self.root)
         i = 1
         while i <= h:
-            self.printgivenlevel(self.root, i, ind)
+            self.printgivenlevel(self.root, i)
             print
             print r"|||||"
             i += 1
 
-    def sizenode(self, nodes, ind=0):
+    def sizenode(self, nodes):
         """Кол во узлов
         :param ind:
         :param nodes:
         """
-        try:
-            if not nodes[ind]:
-                return 0
-        except IndexError:
-            if not nodes:
-                return 0
-            else:
-                return "Index Error(sn)"
-        return self.sizenode(nodes[ind].left) + 1 + self.sizenode(nodes[ind].right)
 
-    def addnode(self, data, root, ind=0):
+        if not nodes:
+            return 0
+
+        return self.sizenode(nodes.left) + 1 + self.sizenode(nodes.right)
+
+    def addnode(self, data, root):
         """Добавление узла
         :param data:
         :param root:
         :param ind:
         """
-        try:
-            if not root[ind]:
-                root.append(self.newnode(data))
-                return 1
-        except IndexError:
-            root.append(self.newnode(data))
+
+        if not root:
+            self.root = self.newnode(data)
             return 1
-        try:
-            if root[ind].data == data:
-                return 0
-        except IndexError:
-            return r'Index Error(an)'
-        if data > root[ind].data:
-            return self.addnode(data, root[ind].right, ind)
+
+
+
+        if root.data == data:
+            return 0
+
+        if data > root.data:
+            return self.addnode(data, root.right)
         if data < root[ind].data:
-            return self.addnode(data, root[ind].left, ind)
+            return self.addnode(data, root.left)
 
     @staticmethod
     def roteteright(nodes, ind=0):

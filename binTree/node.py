@@ -5,10 +5,10 @@ class Node(object):
     """Класс узла """
 
     def __init__(self, data=None, left=None, right=None):
-        if not right:
-            right = []
-        if not left:
-            left = []
+#        if not right:
+#            right = []
+#        if not left:
+#            left = []
         self.data = data
         self.left = left
         self.right = right
